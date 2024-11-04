@@ -17,17 +17,15 @@ int main(int argc, char *argv[]) {
     const char *command = argv[1];
 
     if (strcmp(command, "tokenize") == 0) {
-        // You can use print statements as follows for debugging, they'll be visible when running tests.
+
         fprintf(stderr, "Logs from your program will appear here!\n");
         
         char *file_contents = read_file_contents(argv[2]);
 
-        // Uncomment this block to pass the first stage
-        // if (strlen(file_contents) > 0) {
-        //     fprintf(stderr, "Scanner not implemented\n");
-        //     exit(1);
-        // } 
-        // printf("EOF  null\n"); // Placeholder, remove this line when implementing the scanner
+        if (strlen(file_contents) > 0) {
+            fprintf(stderr, "Scanner not implemented\n");
+            exit(1);
+        } 
         
         free(file_contents);
     } else {
