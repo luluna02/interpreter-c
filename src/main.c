@@ -189,9 +189,9 @@ int main(int argc, char *argv[]) {
                             // For integers, append ".0" to match the expected format
                             snprintf(literal, sizeof(literal), "%s.0", lexeme);
                         }
-
+                        double value = atof(lexeme);
                         // Print the token with lexeme and formatted literal.
-                        printf("NUMBER %s %.2f\n", lexeme, literal);
+                        printf("NUMBER %s %.2f\n", lexeme, value);
 
                         i--; // Adjust the loop counter after processing.
                         break;
