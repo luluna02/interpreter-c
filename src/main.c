@@ -24,23 +24,43 @@ int main(int argc, char *argv[]) {
         char *file_contents = read_file_contents(argv[2]);
 
         if (strlen(file_contents) > 0) {
-            for(int i = 0; i < strlen(file_contents); i++){
-                if (file_contents[i] == '('){
-                    printf("LEFT_PAREN ( null\n");
+            for (int i = 0; i < strlen(file_contents); i++) {
+                switch (file_contents[i]) {
+                    case '(':
+                        printf("LEFT_PAREN ( null\n");
+                        break;
+                    case ')':
+                        printf("RIGHT_PAREN ) null\n");
+                        break;
+                    case '{':
+                        printf("LEFT_BRACE { null\n");
+                        break;
+                    case '}':
+                        printf("RIGHT_BRACE } null\n");
+                        break;
+                    case ',':
+                        printf("COMMA , null\n");
+                        break;
+                    case '.':
+                        printf("DOT . null\n");
+                        break;
+                    case '-':
+                        printf("MINUS - null\n");
+                        break;
+                    case '+':
+                        printf("PLUS + null\n");
+                        break;
+                    case ';':
+                        printf("SEMICOLON ; null\n");
+                        break;
+                    case '*':
+                        printf("STAR * null\n");
+                        break;
+                    default:
+                        break;
                 }
-                else if (file_contents[i] == ')'){
-                    printf("RIGHT_PAREN ) null\n");
-                }
-                if (file_contents[i] == '{'){
-                    printf("LEFT_BRACE { null\n");
-                }
-                else if (file_contents[i] == '}'){
-                    printf("RIGHT_BRACE } null\n");
-                }
-                
-   
             }
-        } 
+        }
 
         printf("EOF  null\n");
         free(file_contents);
