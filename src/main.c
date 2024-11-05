@@ -10,11 +10,13 @@ int main(int argc, char *argv[]) {
     setbuf(stdout, NULL);
     setbuf(stderr, NULL);
 
+    int temp = 0;
+
     if (argc < 3) {
         fprintf(stderr, "Usage: ./your_program tokenize <filename>\n");
         return 1;
     }
-
+    int current_line = 1;
 
     const char *command = argv[1];
     int EXIT_CODE = EXIT_SUCCESS;
@@ -103,21 +105,35 @@ int main(int argc, char *argv[]) {
                         }
                         break;
                     case '/':
-                        // check if anoother = exists?
+                        temp = i;
                         if(file_contents[i+1] == '/'){
-                            int temp = i;
+                            
                             while (file_contents[temp] != '\n' && file_contents[temp] != '\0'){
                                 temp++;
                             }
-                            i = temp+1;
+                            i = temp + 1;
+                            if (file_contents[temp] == '\n') {
+                            ++current_line;
+                        }
                         }
                         else{
                             printf("SLASH / null\n");
                         }
                         break;
-                    default:
+                    case'$':
+                    case'#':
+                    case'@':
+                    case'%':
                         fprintf(stderr,"[line %d] Error: Unexpected character: %c\n", 1, file_contents[i]);
                         EXIT_CODE = 65;
+                        break;
+                    case ' ':
+                    case '\r':
+                    case '\t':
+                        break;
+                    case '\n':
+                        ++current_line;
+                    default:
                         break;
                 }
             }
