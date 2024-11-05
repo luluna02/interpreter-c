@@ -122,34 +122,68 @@ int main(int argc, char *argv[]) {
                         break;
 
                     case '"':{  
-                    int start = i;
-                    i++;  // Move past the opening quote
-                    int str_start = i;
+                        int start = i;
+                        i++;  // Move past the opening quote
+                        int str_start = i;
 
-                    // Scan until closing quote or end of file
-                    while (file_contents[i] != '"' && file_contents[i] != '\0') {
-                        if (file_contents[i] == '\n') ++current_line;
-                        i++;
+                        // Scan until closing quote or end of file
+                        while (file_contents[i] != '"' && file_contents[i] != '\0') {
+                            if (file_contents[i] == '\n') ++current_line;
+                            i++;
+                        }
+
+                        if (file_contents[i] == '\0') {
+                            // Unterminated string
+                            fprintf(stderr, "[line %d] Error: Unterminated string.\n", current_line);
+                            EXIT_CODE = 65;
+                        } else {
+                            // Extract the string content
+                            int len = i - str_start;
+                            char *literal = (char *)malloc(len + 1);
+                            strncpy(literal, &file_contents[str_start], len);
+                            literal[len] = '\0';
+
+                            // Print STRING token with lexeme and literal
+                            printf("STRING %.*s %s\n", len + 2, &file_contents[start], literal);
+
+                            free(literal);
+                        }
+                        break;
+                    }
+                    case '0' ... '9': {  // Check if the current character is a digit.
+                        int start = i;
+                        
+                        // Parse the integer part.
+                        while (i < strlen(file_contents) && isdigit(file_contents[i])) {
+                            i++;
+                        }
+
+                        // Check for a decimal point followed by a digit (for floating-point numbers).
+                        if (file_contents[i] == '.' && isdigit(file_contents[i + 1])) {
+                            i++; // Include the dot.
+                            while (i < strlen(file_contents) && isdigit(file_contents[i])) {
+                                i++; // Parse the fractional part.
+                            }
+                        }
+
+                        // Calculate the length of the lexeme.
+                        int len = i - start;
+
+                        // Extract the lexeme.
+                        char lexeme[len + 1];
+                        strncpy(lexeme, &file_contents[start], len);
+                        lexeme[len] = '\0'; // Null-terminate the lexeme string.
+
+                        // Convert lexeme to double for the literal value.
+                        double literal_value = atof(lexeme);
+
+                        // Print the token with lexeme and literal.
+                        printf("NUMBER %s %.1f\n", lexeme, literal_value);
+
+                        i--; // Adjust the loop counter after processing.
+                        break;
                     }
 
-                    if (file_contents[i] == '\0') {
-                        // Unterminated string
-                        fprintf(stderr, "[line %d] Error: Unterminated string.\n", current_line);
-                        EXIT_CODE = 65;
-                    } else {
-                        // Extract the string content
-                        int len = i - str_start;
-                        char *literal = (char *)malloc(len + 1);
-                        strncpy(literal, &file_contents[str_start], len);
-                        literal[len] = '\0';
-
-                        // Print STRING token with lexeme and literal
-                        printf("STRING %.*s %s\n", len + 2, &file_contents[start], literal);
-
-                        free(literal);
-                    }
-                    break;
-                }
                         
 
                     case'$':
