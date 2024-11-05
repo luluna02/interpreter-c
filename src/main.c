@@ -152,50 +152,58 @@ int main(int argc, char *argv[]) {
                         break;
                     }
                     case '0' ... '9': {  // Check if the current character is a digit.
-                        int start = i;
+    int start = i;
 
-                        // Parse the integer part.
-                        while (i < strlen(file_contents) && isdigit(file_contents[i])) {
-                            i++;
-                        }
+    // Parse the integer part.
+    while (i < strlen(file_contents) && isdigit(file_contents[i])) {
+        i++;
+    }
 
-                        // Flag for detecting if it's a floating-point number.
-                        int is_float = 0;
+    // Flag for detecting if it's a floating-point number.
+    int is_float = 0;
 
-                        // Check for a decimal point followed by a digit (for floating-point numbers).
-                        if (file_contents[i] == '.' && isdigit(file_contents[i + 1])) {
-                            is_float = 1;  // Mark as a float
-                            i++; // Include the dot.
-                            while (i < strlen(file_contents) && isdigit(file_contents[i])) {
-                                i++; // Parse the fractional part.
-                            }
-                        }
+    // Check for a decimal point followed by a digit (for floating-point numbers).
+    if (file_contents[i] == '.' && isdigit(file_contents[i + 1])) {
+        is_float = 1;  // Mark as a float
+        i++; // Include the dot.
+        while (i < strlen(file_contents) && isdigit(file_contents[i])) {
+            i++; // Parse the fractional part.
+        }
+    }
 
-                        // Calculate the length of the lexeme.
-                        int len = i - start;
+    // Calculate the length of the lexeme.
+    int len = i - start;
 
-                        // Extract the lexeme.
-                        char lexeme[len + 1];
-                        strncpy(lexeme, &file_contents[start], len);
-                        lexeme[len] = '\0'; // Null-terminate the lexeme string.
+    // Extract the lexeme.
+    char lexeme[len + 1];
+    strncpy(lexeme, &file_contents[start], len);
+    lexeme[len] = '\0'; // Null-terminate the lexeme string.
 
-                        // Prepare the literal value
-                        char literal[50];
-                        if (is_float) {
-                            // Convert lexeme to double and format it to one decimal place
-                            double value = atof(lexeme);
-                            snprintf(literal, sizeof(literal), "%.1f", value);
-                        } else {
-                            // For integers, append ".0" to match the expected format
-                            snprintf(literal, sizeof(literal), "%s.0", lexeme);
-                        }
-                        double value = atof(lexeme);
-                        // Print the token with lexeme and formatted literal.
-                        printf("NUMBER %s %.f\n", lexeme, value);
+    // Prepare the literal value
+    char literal[50];
+    double value = atof(lexeme);  // Convert lexeme to double
 
-                        i--; // Adjust the loop counter after processing.
-                        break;
-                    }
+    if (is_float) {
+        // For floats, check if it has a fractional part that is all zeros
+        if (value == (int)value) {
+            // It's a float that has no significant decimal value
+            snprintf(literal, sizeof(literal), "%.1f", value); // Format to one decimal place
+        } else {
+            // It's a valid float with a significant fractional part
+            snprintf(literal, sizeof(literal), "%s", lexeme); // Keep the original lexeme
+        }
+    } else {
+        // For integers, format to include .0
+        snprintf(literal, sizeof(literal), "%.1f", value); // Format to one decimal place
+    }
+
+    // Print the token with lexeme and formatted literal.
+    printf("NUMBER %s %s\n", lexeme, literal);
+
+    i--; // Adjust the loop counter after processing.
+    break;
+}
+
 
                            
 
