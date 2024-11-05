@@ -191,7 +191,7 @@ int main(int argc, char *argv[]) {
                         }
                         double value = atof(lexeme);
                         // Print the token with lexeme and formatted literal.
-                        printf("NUMBER %s %.2f\n", lexeme, value);
+                        printf("NUMBER %s %.f\n", lexeme, value);
 
                         i--; // Adjust the loop counter after processing.
                         break;
