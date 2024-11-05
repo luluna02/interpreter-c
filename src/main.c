@@ -31,6 +31,13 @@ int main(int argc, char *argv[]) {
                 else if (file_contents[i] == ')'){
                     printf("RIGHT_PAREN ) null\n");
                 }
+                if (file_contents[i] == '{'){
+                    printf("LEFT_BRACE { null\n");
+                }
+                else if (file_contents[i] == '}'){
+                    printf("RIGHT_BRACE } null\n");
+                }
+                
    
             }
         } 
