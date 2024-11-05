@@ -102,6 +102,19 @@ int main(int argc, char *argv[]) {
                             printf("GREATER > null\n");
                         }
                         break;
+                    case '/':
+                        // check if anoother = exists?
+                        if(file_contents[i+1] == '/'){
+                            int temp = i;
+                            while (file_contents[temp] != '\n' && file_contents[temp] != '\0'){
+                                temp++;
+                            }
+                            i = temp+1;
+                        }
+                        else{
+                            printf("SLASH / null\n");
+                        }
+                        break;
                     default:
                         fprintf(stderr,"[line %d] Error: Unexpected character: %c\n", 1, file_contents[i]);
                         EXIT_CODE = 65;
