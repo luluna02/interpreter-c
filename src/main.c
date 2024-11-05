@@ -15,13 +15,16 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+
     const char *command = argv[1];
+    int EXIT_CODE = EXIT_SUCCESS;
 
     if (strcmp(command, "tokenize") == 0) {
 
         fprintf(stderr, "Logs from your program will appear here!\n");
         
         char *file_contents = read_file_contents(argv[2]);
+
 
         if (strlen(file_contents) > 0) {
             for (int i = 0; i < strlen(file_contents); i++) {
@@ -57,6 +60,8 @@ int main(int argc, char *argv[]) {
                         printf("STAR * null\n");
                         break;
                     default:
+                        fprintf(stderr,"[line %d] Error: Unexpected character: %c\n", 1, file_contents[i]);
+                        EXIT_CODE = 65;
                         break;
                 }
             }
@@ -64,12 +69,13 @@ int main(int argc, char *argv[]) {
 
         printf("EOF  null\n");
         free(file_contents);
+
     } else {
         fprintf(stderr, "Unknown command: %s\n", command);
         return 1;
     }
-
-    return 0;
+    return EXIT_CODE;
+    
 }
 
 char *read_file_contents(const char *filename) {
