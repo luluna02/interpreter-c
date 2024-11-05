@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 char *read_file_contents(const char *filename);
 
 int main(int argc, char *argv[]) {
@@ -23,11 +24,18 @@ int main(int argc, char *argv[]) {
         char *file_contents = read_file_contents(argv[2]);
 
         if (strlen(file_contents) > 0) {
-            fprintf(stderr, "Scanner not implemented\n");
-            exit(1);
+            for(int i = 0; i < strlen(file_contents); i++){
+                if (file_contents[i] == '('){
+                    printf("LEFT_PAREN ( null\n");
+                }
+                else if (file_contents[i] == ')'){
+                    printf("RIGHT_PAREN ) null\n");
+                }
+   
+            }
         } 
-        printf("EOF  null\n"); // Placeholder, remove this line when implementing the scanner
-        
+
+        printf("EOF  null\n");
         free(file_contents);
     } else {
         fprintf(stderr, "Unknown command: %s\n", command);
