@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
                             while (file_contents[temp] != '\n' && file_contents[temp] != '\0'){
                                 temp++;
                             }
-                            i = temp + 1;
+                            i = temp;
                             if (file_contents[temp] == '\n') {
                             ++current_line;
                         }
@@ -124,7 +124,7 @@ int main(int argc, char *argv[]) {
                     case'#':
                     case'@':
                     case'%':
-                        fprintf(stderr,"[line %d] Error: Unexpected character: %c\n", 1, file_contents[i]);
+                        fprintf(stderr,"[line %d] Error: Unexpected character: %c\n", current_line, file_contents[i]);
                         EXIT_CODE = 65;
                         break;
                     case ' ':
