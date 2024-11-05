@@ -72,6 +72,16 @@ int main(int argc, char *argv[]) {
                             printf("EQUAL = null\n");
                         }
                         break;
+                    case '!':
+                        // check if anoother = exists?
+                        if(file_contents[i+1] == '='){
+                            printf("BANG_EQUAL != null\n");
+                            i++;
+                        }
+                        else{
+                            printf("BANG ! null\n");
+                        }
+                        break;
                     default:
                         fprintf(stderr,"[line %d] Error: Unexpected character: %c\n", 1, file_contents[i]);
                         EXIT_CODE = 65;
