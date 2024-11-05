@@ -191,7 +191,7 @@ int main(int argc, char *argv[]) {
                         }
 
                         // Print the token with lexeme and formatted literal.
-                        printf("NUMBER %s %s\n", lexeme, literal);
+                        printf("NUMBER %s %.2f\n", lexeme, literal);
 
                         i--; // Adjust the loop counter after processing.
                         break;
