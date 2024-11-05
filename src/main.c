@@ -27,7 +27,10 @@ int main(int argc, char *argv[]) {
 
 
         if (strlen(file_contents) > 0) {
-            for (int i = 0; i < strlen(file_contents); i++) {
+            for (int i = 0; i < strlen(file_contents); i++) { 
+                if (file_contents[i] == '\0') {
+                break; 
+                }
                 switch (file_contents[i]) {
                     case '(':
                         printf("LEFT_PAREN ( null\n");
@@ -63,6 +66,7 @@ int main(int argc, char *argv[]) {
                         // check if anoother = exists?
                         if(file_contents[i+1] == '='){
                             printf("EQUAL_EQUAL == null\n");
+                            i++;
                         }
                         else{
                             printf("EQUAL = null\n");
