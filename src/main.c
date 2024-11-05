@@ -153,14 +153,18 @@ int main(int argc, char *argv[]) {
                     }
                     case '0' ... '9': {  // Check if the current character is a digit.
                         int start = i;
-                        
+
                         // Parse the integer part.
                         while (i < strlen(file_contents) && isdigit(file_contents[i])) {
                             i++;
                         }
 
+                        // Flag for detecting if it's a floating-point number.
+                        int is_float = 0;
+
                         // Check for a decimal point followed by a digit (for floating-point numbers).
                         if (file_contents[i] == '.' && isdigit(file_contents[i + 1])) {
+                            is_float = 1;  // Mark as a float
                             i++; // Include the dot.
                             while (i < strlen(file_contents) && isdigit(file_contents[i])) {
                                 i++; // Parse the fractional part.
@@ -175,15 +179,18 @@ int main(int argc, char *argv[]) {
                         strncpy(lexeme, &file_contents[start], len);
                         lexeme[len] = '\0'; // Null-terminate the lexeme string.
 
-                        // Convert lexeme to double for the literal value.
-                        double literal_value = atof(lexeme);
-
-                        // Print the token with lexeme and literal.
-                        printf("NUMBER %s %.1f\n", lexeme, literal_value);
+                        // Print the token with lexeme and formatted literal.
+                        if (is_float) {
+                            printf("NUMBER %s %s\n", lexeme, lexeme);  // Floating-point number as is
+                        } else {
+                            printf("NUMBER %s %s.0\n", lexeme, lexeme);  // Integer with ".0" as literal
+                        }
 
                         i--; // Adjust the loop counter after processing.
                         break;
                     }
+
+                           
 
                         
 
