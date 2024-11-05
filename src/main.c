@@ -59,6 +59,15 @@ int main(int argc, char *argv[]) {
                     case '*':
                         printf("STAR * null\n");
                         break;
+                    case '=':
+                        // check if anoother = exists?
+                        if(file_contents[i+1] == '='){
+                            printf("EQUAL_EQUAL == null\n");
+                        }
+                        else{
+                            printf("EQUAL = null\n");
+                        }
+                        break;
                     default:
                         fprintf(stderr,"[line %d] Error: Unexpected character: %c\n", 1, file_contents[i]);
                         EXIT_CODE = 65;
