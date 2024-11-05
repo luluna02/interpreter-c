@@ -179,12 +179,19 @@ int main(int argc, char *argv[]) {
                         strncpy(lexeme, &file_contents[start], len);
                         lexeme[len] = '\0'; // Null-terminate the lexeme string.
 
-                        // Print the token with lexeme and formatted literal.
+                        // Prepare the literal value
+                        char literal[50];
                         if (is_float) {
-                            printf("NUMBER %s %s\n", lexeme, lexeme);  // Floating-point number as is
+                            // Convert lexeme to double and format it to one decimal place
+                            double value = atof(lexeme);
+                            snprintf(literal, sizeof(literal), "%.1f", value);
                         } else {
-                            printf("NUMBER %s %s.0\n", lexeme, lexeme);  // Integer with ".0" as literal
+                            // For integers, append ".0" to match the expected format
+                            snprintf(literal, sizeof(literal), "%s.0", lexeme);
                         }
+
+                        // Print the token with lexeme and formatted literal.
+                        printf("NUMBER %s %s\n", lexeme, literal);
 
                         i--; // Adjust the loop counter after processing.
                         break;
