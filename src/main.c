@@ -120,6 +120,38 @@ int main(int argc, char *argv[]) {
                             printf("SLASH / null\n");
                         }
                         break;
+
+                    case '"':{  
+                    int start = i;
+                    i++;  // Move past the opening quote
+                    int str_start = i;
+
+                    // Scan until closing quote or end of file
+                    while (file_contents[i] != '"' && file_contents[i] != '\0') {
+                        if (file_contents[i] == '\n') ++current_line;
+                        i++;
+                    }
+
+                    if (file_contents[i] == '\0') {
+                        // Unterminated string
+                        fprintf(stderr, "[line %d] Error: Unterminated string.\n", current_line);
+                        EXIT_CODE = 65;
+                    } else {
+                        // Extract the string content
+                        int len = i - str_start;
+                        char *literal = (char *)malloc(len + 1);
+                        strncpy(literal, &file_contents[str_start], len);
+                        literal[len] = '\0';
+
+                        // Print STRING token with lexeme and literal
+                        printf("STRING %.*s %s\n", len + 2, &file_contents[start], literal);
+
+                        free(literal);
+                    }
+                    break;
+                }
+                        
+
                     case'$':
                     case'#':
                     case'@':
