@@ -94,6 +94,38 @@ const char* token_type_as_string(const enum TokenType type){
         return "IDENTIFIER";
     case END_OF_FILE:
         return "EOF";
+    case AND:             
+        return "AND";
+    case CLASS:           
+        return "CLASS";
+    case ELSE:            
+        return "ELSE";
+    case FALSE:           
+        return "FALSE";
+    case FUN:             
+        return "FUN";
+    case FOR:             
+        return "FOR";
+    case IF:              
+        return "IF";
+    case NIL:             
+        return "NIL";
+    case OR:              
+        return "OR";
+    case PRINT:           
+        return "PRINT";
+    case RETURN:          
+        return "RETURN";
+    case SUPER:           
+        return "SUPER";
+    case THIS:            
+        return "THIS";
+    case TRUE:          
+        return "TRUE";
+    case VAR:             
+        return "VAR";
+    case WHILE:           
+        return "WHILE";
     default:
         break;
     }
@@ -109,8 +141,6 @@ void print_token(const Token *t)
     {
         printf("%c", t->lexeme[i]);
     }
-
-    // If there is no literal, print "null" without extra space
     if (t->literal != NULL) {
         if (t->type == STRING) {
             printf(" %s\n", (char *)t->literal); // Add a space between lexeme and string literal
@@ -360,9 +390,9 @@ int scan_tokens(TokenArray *a, char *file_contents){
             while(isAlpha(*temp) || isdigit(*temp) && *temp != '\0' && *temp != '\n'){
                 temp++;
             }
-            t->type = IDENTIFIER;
             int l = (temp - file_contents);
             t->length = l;
+            t->type = lookup_keywords(file_contents, l);
             append(a, t);
             file_contents = temp-1;
             break;
@@ -387,5 +417,15 @@ int scan_tokens(TokenArray *a, char *file_contents){
 
 int isAlpha(char c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
+}
+
+
+enum TokenType lookup_keywords(const char *lexeme, int length) {
+    for (size_t i = 0; i < sizeof(keywords) / sizeof(keywords[0]); i++) {
+        if (strncmp(lexeme, keywords[i].c, length) == 0 && keywords[i].c[length] == '\0') {
+            return keywords[i].type;
+        }
+    }
+    return IDENTIFIER; 
 }
 
