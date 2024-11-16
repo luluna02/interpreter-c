@@ -77,6 +77,9 @@ void print_ast(Expr *expr) {
         for(int i = 0; i < expr->as.binary.binary_op.length; ++i)
         {
             printf("%c", expr->as.binary.binary_op.lexeme[i]);
+            if(i == (expr->as.binary.binary_op.length - 1)){
+                printf(" ");
+            }
         }
         print_ast(expr->as.binary.left);
         printf(" ");
