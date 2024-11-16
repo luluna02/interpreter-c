@@ -24,6 +24,15 @@ Expr* create_grouping_expr(Expr* expression) {
     return expr;
 }
 
+Expr* create_unary_expr(Token unary_op, Expr* expression) {
+    Expr* expr = malloc(sizeof(Expr));
+    expr->type = UNARY;
+    expr->as.unary.unary_op = unary_op;
+    expr->as.unary.expression = expression;
+    return expr;
+}
+
+
 void free_expr(Expr* expr) {
     if (!expr) return;
     switch (expr->type) {
@@ -34,6 +43,8 @@ void free_expr(Expr* expr) {
         case GROUPING:
             free_expr(expr->as.grouping.expression);
             break;
+        case UNARY:
+            free_expr(expr->as.unary.expression);
         case LITERAL:
             break;
     }
@@ -73,6 +84,15 @@ void print_ast(Expr *expr) {
     else if(expr->type == GROUPING){
         printf("(group ");
         print_ast(expr->as.grouping.expression); // Recursively print the inner expression
+        printf(")");
+    }
+    else if(expr->type == UNARY){
+        printf("(");
+        for(int i = 0; i < expr->as.unary.unary_op.length; ++i)
+        {
+            printf("%c ", expr->as.unary.unary_op.lexeme[i]);
+        }
+        print_ast(expr->as.unary.expression); // Recursively print the inner expression
         printf(")");
     }
 }

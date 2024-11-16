@@ -19,12 +19,18 @@ typedef struct {
     Expr* expression;
 } GroupingExpr;
 
+typedef struct {
+    Expr* expression;
+    Token unary_op;
+} UnaryExpr;
+
 struct Expr {
-    enum { BINARY, LITERAL, GROUPING } type;
+    enum { BINARY, LITERAL, GROUPING, UNARY } type;
     union {
         BinaryExpr binary;
         LiteralExpr literal;
         GroupingExpr grouping;
+        UnaryExpr unary;
     } as;
 };
 
@@ -32,6 +38,7 @@ struct Expr {
 Expr* create_binary_expr(Token binary_op, Expr* left, Expr* right);
 Expr* create_literal_expr(Token value);
 Expr* create_grouping_expr(Expr* expression);
+Expr* create_unary_expr(Token unary_op, Expr* expression);
 void print_ast(Expr *expr);
 void free_expr(Expr* expr);
 #endif
