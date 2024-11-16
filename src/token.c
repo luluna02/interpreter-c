@@ -385,7 +385,7 @@ int scan_tokens(TokenArray *a, char *file_contents){
             }
         case 'a' ... 'z':
         case 'A' ... 'Z':
-        case '_':{
+        case '_':{ 
             temp++;
             while(isAlpha(*temp) || isdigit(*temp) && *temp != '\0' && *temp != '\n'){
                 temp++;
