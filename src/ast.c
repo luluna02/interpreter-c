@@ -70,6 +70,11 @@ void print_ast(Expr *expr) {
         printf(" ");
         print_ast(expr->as.binary.right);
     }
+    else if(expr->type == GROUPING){
+        printf("(group ");
+        print_ast(expr->as.grouping.expression); // Recursively print the inner expression
+        printf(")");
+    }
 }
 
 
