@@ -24,7 +24,7 @@ bool match(Parser* parser, enum TokenType type) {
 
 
 Expr* parse_primary(Parser* parser) {
-    if (match(parser, TRUE) || match(parser, FALSE) || match(parser, NIL) || match(parser, NUMBER)) {
+    if (match(parser, TRUE) || match(parser, FALSE) || match(parser, NIL) || match(parser, NUMBER) || match(parser, STRING)) {
         return create_literal_expr(*parser->tokens->array[parser->current - 1]);
     }
 
