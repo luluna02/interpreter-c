@@ -47,8 +47,18 @@ Expr* parse_expression(Parser* parser) {
 }
 
 Expr* parse_term(Parser* parser) {
-    Expr* expr = parse_unary(parser);
+    Expr* expr = parse_factor(parser);
     while (match(parser, PLUS) || match(parser, MINUS)) {
+        Token operator = *parser->tokens->array[parser->current - 1];
+        Expr* right = parse_factor(parser);
+        expr = create_binary_expr(operator,expr, right);
+    }
+    return expr;
+}
+
+Expr* parse_factor(Parser* parser) {
+    Expr* expr = parse_unary(parser);
+    while (match(parser, SLASH) || match(parser, STAR)) {
         Token operator = *parser->tokens->array[parser->current - 1];
         Expr* right = parse_unary(parser);
         expr = create_binary_expr(operator,expr, right);

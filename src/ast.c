@@ -73,6 +73,7 @@ void print_ast(Expr *expr) {
         }
         }
     } else if (expr->type == BINARY) {
+        printf("(");
         for(int i = 0; i < expr->as.binary.binary_op.length; ++i)
         {
             printf("%c ", expr->as.binary.binary_op.lexeme[i]);
@@ -80,6 +81,8 @@ void print_ast(Expr *expr) {
         print_ast(expr->as.binary.left);
         printf(" ");
         print_ast(expr->as.binary.right);
+        printf(")");
+
     }
     else if(expr->type == GROUPING){
         printf("(group ");
