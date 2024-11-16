@@ -44,14 +44,14 @@ void print_ast(Expr *expr) {
     if (expr->type == LITERAL) {
         if (expr->as.literal.value.literal != NULL) {
         if (expr->as.literal.value.type == STRING) {
-            printf(" %s", (char *)expr->as.literal.value.literal); // Add a space between lexeme and string literal
+            printf("%s", (char *)expr->as.literal.value.literal); // Add a space between lexeme and string literal
         }
         else if (expr->as.literal.value.type == NUMBER) {
             double value = *(double *)expr->as.literal.value.literal;
             if (value == (int)value) {
-                printf(" %.1f", value); // Format number with a space before it
+                printf("%.1f", value); // Format number with a space before it
             } else {
-                printf(" %g", value);
+                printf("%g", value);
             }
         }
         }
@@ -64,7 +64,7 @@ void print_ast(Expr *expr) {
     } else if (expr->type == BINARY) {
         for(int i = 0; i < expr->as.binary.binary_op.length; ++i)
         {
-            printf("%c", expr->as.binary.binary_op.lexeme[i]);
+            printf("%c ", expr->as.binary.binary_op.lexeme[i]);
         }
         print_ast(expr->as.binary.left);
         printf(" ");
