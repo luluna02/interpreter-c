@@ -43,7 +43,17 @@ Expr* parse_primary(Parser* parser) {
 
 
 Expr* parse_expression(Parser* parser) {
-    return parse_comparison(parser);
+    return parse_equality(parser);
+}
+
+Expr* parse_equality(Parser* parser) {
+    Expr* expr = parse_comparison(parser);
+    while (match(parser, EQUAL_EQUAL) || match(parser, BANG_EQUAL)) {
+        Token operator = *parser->tokens->array[parser->current - 1];
+        Expr* right = parse_comparison(parser);
+        expr = create_binary_expr(operator,expr, right);
+    }
+    return expr;
 }
 
 Expr* parse_comparison(Parser* parser) {
