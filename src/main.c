@@ -55,11 +55,11 @@ int main(int argc, char *argv[]) {
 
         Parser *parser = create_parser(tokens);
         Expr *ast = parse_expression(parser);
-        if (ast) {
-            print_ast(ast);  // Print the AST
-        } else {
+        if (parser->had_error== true) {
             fprintf(stderr, "Error parsing AST\n");
-            exit_code = 1;
+            exit_code = 65;
+        } else {
+            print_ast(ast);  // Print the AST
         }
         free_expr(ast);
         free_parser(parser);

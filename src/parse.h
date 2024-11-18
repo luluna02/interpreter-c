@@ -7,6 +7,7 @@
 typedef struct {
     TokenArray* tokens;
     size_t current;
+    bool had_error;
 } Parser;
 
 Parser* create_parser(TokenArray* tokens);
@@ -21,5 +22,9 @@ bool match(Parser* parser, enum TokenType type);
 Token* advance(Parser* parser);
 Token* peek(Parser* parser);
 void free_parser(Parser* parser);
+void report_error(Parser* parser, Token* token, const char* message);
+void synchronize(Parser* parser);
+bool is_at_end(Parser* parser); 
+
 
 #endif

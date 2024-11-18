@@ -31,14 +31,14 @@ Expr* parse_primary(Parser* parser) {
     if (match(parser, LEFT_PAREN)) {
         Expr* expr = parse_expression(parser);
         if (!match(parser, RIGHT_PAREN)) {
-            fprintf(stderr, "Error: Expected ')'.\n");
-            exit(1);
+            report_error(parser, peek(parser), "Expected ')'.");
+            return NULL;
         }
         return create_grouping_expr(expr);
     }
 
-    fprintf(stderr, "Error: Unexpected token.\n");
-    exit(1);
+    report_error(parser, peek(parser), "Expected an expression.");
+    return NULL;
 }
 
 
@@ -102,6 +102,7 @@ Parser* create_parser(TokenArray* tokens) {
     Parser* parser = malloc(sizeof(Parser));
     parser->tokens = tokens;
     parser->current = 0;
+    parser->had_error = false;
     return parser;
 }
 
@@ -109,5 +110,22 @@ void free_parser(Parser* parser) {
     free(parser);
 }
 
+
+
+// 
+
+bool is_at_end(Parser* parser) {
+    Token* token = peek(parser);
+    return token && token->type == END_OF_FILE; // Adjust EOF_TOKEN to match your EOF type definition
+}
+
+void report_error(Parser* parser, Token* token, const char* message) {
+    if (token->type == END_OF_FILE) {
+        fprintf(stderr, "[line %d] Error at end: %s\n", token->line, message);
+    } else {
+        fprintf(stderr, "[line %d] Error at '%s': %s\n", token->line, token->lexeme, message);
+    }
+    parser->had_error = true;
+}
 
 
