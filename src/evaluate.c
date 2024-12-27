@@ -53,10 +53,27 @@ EvalResult evaluate_expr(Expr* expr) {
                     result.boolean_value = (inner_result.number_value == 0) ? true : false; // Treat non-zero as true, zero as false
                 }
             }
-        }
-        case BINARY:
-            // Implement unary and binary expression evaluation
             break;
+        }
+        case BINARY:{
+            EvalResult left_result = evaluate_expr(expr->as.binary.left);
+            EvalResult right_result = evaluate_expr(expr->as.binary.right);
+
+            // Perform the binary operation based on the operator type
+            if (expr->as.binary.binary_op.type == STAR) {  // Multiplication
+                if (left_result.is_number && right_result.is_number) {
+                    result.is_number = true;
+                    result.number_value = left_result.number_value * right_result.number_value;
+                }
+            } else if (expr->as.binary.binary_op.type == SLASH) {  // Division
+                if (left_result.is_number && right_result.is_number) {
+                    result.is_number = true;
+                    result.number_value = left_result.number_value / right_result.number_value;
+                }
+            }
+            break;
+        }  
+        
     }
 
     return result;
@@ -76,3 +93,9 @@ void print_eval_result(EvalResult result){
     }
 }
 
+void free_eval_result(EvalResult *result) {
+    if (result->is_string) {
+        free(result->string_value);  // Free the string if it was allocated
+    }
+    // No need to free the number or boolean, as they are primitive types
+}

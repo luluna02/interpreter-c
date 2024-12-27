@@ -89,8 +89,10 @@ int main(int argc, char *argv[]) {
             //EVALUATE
             EvalResult result = evaluate_expr(ast);
             print_eval_result(result);
+            free_eval_result(&result);
         }
         free_expr(ast);
+        
         free_parser(parser);
         free(file_contents);
     }

@@ -18,5 +18,6 @@ typedef struct {
 // Evaluate an expression
 EvalResult evaluate_expr(Expr* expr);
 void print_eval_result(EvalResult result);
+void free_eval_result(EvalResult *result);
 
 #endif
