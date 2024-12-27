@@ -71,6 +71,17 @@ EvalResult evaluate_expr(Expr* expr) {
                     result.number_value = left_result.number_value / right_result.number_value;
                 }
             }
+            else if (expr->as.binary.binary_op.type == PLUS) {  // Addition
+                if (left_result.is_number && right_result.is_number) {
+                    result.is_number = true;
+                    result.number_value = left_result.number_value + right_result.number_value;
+                }
+            } else if (expr->as.binary.binary_op.type == MINUS) {  // Subtraction
+                if (left_result.is_number && right_result.is_number) {
+                    result.is_number = true;
+                    result.number_value = left_result.number_value - right_result.number_value;
+                }
+            }
             break;
         }  
         
