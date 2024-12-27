@@ -28,7 +28,32 @@ EvalResult evaluate_expr(Expr* expr) {
         case GROUPING: {
             return evaluate_expr(expr->as.grouping.expression);
         }
-        case UNARY:
+        case UNARY:{
+            // Handle unary operations like negation
+            if (expr->as.unary.unary_op.type == MINUS) {
+                EvalResult inner_result = evaluate_expr(expr->as.unary.expression);
+                if (inner_result.is_number) {
+                    result.is_number = true;
+                    result.number_value = -inner_result.number_value;  // Apply negation
+                }
+            }
+            else if (expr->as.unary.unary_op.type == BANG) {
+                EvalResult inner_result = evaluate_expr(expr->as.unary.expression);
+                if (inner_result.is_boolean) {
+                    result.is_boolean = true;
+                    result.boolean_value = !inner_result.boolean_value;  // Apply negation
+                }
+                else if (inner_result.is_nil) {
+                    result.is_boolean = true;
+                    result.boolean_value = true;  // Negate nil, which is falsy, so result is true
+                }
+                else if (inner_result.is_number) {
+                    // For numbers: non-zero is truthy (negates to false), zero is falsy (negates to true)
+                    result.is_boolean = true;
+                    result.boolean_value = (inner_result.number_value == 0) ? true : false; // Treat non-zero as true, zero as false
+                }
+            }
+        }
         case BINARY:
             // Implement unary and binary expression evaluation
             break;
@@ -50,5 +75,4 @@ void print_eval_result(EvalResult result){
         fprintf(stderr, "Unexpected evaluation result\n");
     }
 }
-
 
