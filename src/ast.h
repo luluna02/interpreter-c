@@ -5,6 +5,7 @@
 
 typedef struct Expr Expr;
 
+
 typedef struct {
     Token binary_op;
     Expr* left;

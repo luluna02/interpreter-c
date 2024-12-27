@@ -5,6 +5,8 @@
 #include "token.h"
 #include "parse.h"
 #include "ast.h"
+#include "evaluate.h"
+
 
 
 char *read_file_contents(const char *filename);
@@ -64,7 +66,35 @@ int main(int argc, char *argv[]) {
         free_expr(ast);
         free_parser(parser);
         free(file_contents);
-    } else {
+    }
+    else if (strcmp(command, "evaluate") == 0) {
+         fprintf(stderr, "Parsing input file...\n");
+
+        char *file_contents = read_file_contents(argv[2]);
+        if (!file_contents) return 1;
+        TokenArray *tokens = create_token_array();
+        exit_code = scan_tokens(tokens, file_contents);
+
+        if (exit_code != 0) {
+            fprintf(stderr, "Error during tokenization\n");
+            free(file_contents);
+            return exit_code;
+        }
+        Parser *parser = create_parser(tokens);
+        Expr *ast = parse_expression(parser);
+        if (parser->had_error== true) {
+            fprintf(stderr, "Error parsing AST\n");
+            exit_code = 65;
+        } else {
+            //EVALUATE
+            EvalResult result = evaluate_expr(ast);
+            print_eval_result(result);
+        }
+        free_expr(ast);
+        free_parser(parser);
+        free(file_contents);
+    }
+     else {
         fprintf(stderr, "Unknown command: %s\n", command);
         return 1;
     }
