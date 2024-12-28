@@ -1,6 +1,7 @@
 #include "evaluate.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 EvalResult evaluate_expr(Expr* expr) {
     EvalResult result = {0};
@@ -75,15 +76,68 @@ EvalResult evaluate_expr(Expr* expr) {
                 if (left_result.is_number && right_result.is_number) {
                     result.is_number = true;
                     result.number_value = left_result.number_value + right_result.number_value;
+                } 
+                else if (left_result.is_string && right_result.is_string) {  // String concatenation
+                    result.is_string = true;
+                    result.string_value = malloc(strlen(left_result.string_value) + strlen(right_result.string_value) + 1);
+                    strcpy(result.string_value, left_result.string_value);
+                    strcat(result.string_value, right_result.string_value);
                 }
             } else if (expr->as.binary.binary_op.type == MINUS) {  // Subtraction
                 if (left_result.is_number && right_result.is_number) {
                     result.is_number = true;
                     result.number_value = left_result.number_value - right_result.number_value;
                 }
+            }else if (expr->as.binary.binary_op.type == GREATER) {  
+                if (left_result.is_number && right_result.is_number) {
+                    result.is_boolean = true;
+                    result.boolean_value = left_result.number_value > right_result.number_value;
+                }
+            }
+            else if (expr->as.binary.binary_op.type == LESS) {  
+                if (left_result.is_number && right_result.is_number) {
+                    result.is_boolean = true;
+                    result.boolean_value = left_result.number_value < right_result.number_value;
+                }
+            }
+            else if (expr->as.binary.binary_op.type == GREATER_EQUAL) {  
+                if (left_result.is_number && right_result.is_number) {
+                    result.is_boolean = true;
+                    result.boolean_value = left_result.number_value >= right_result.number_value;
+                }
+            }
+            else if (expr->as.binary.binary_op.type == LESS_EQUAL) {  
+                if (left_result.is_number && right_result.is_number) {
+                    result.is_boolean = true;
+                    result.boolean_value = left_result.number_value <= right_result.number_value;
+                }
+            }
+            else if (expr->as.binary.binary_op.type == EQUAL_EQUAL) {  
+                if (left_result.is_string && right_result.is_string) {
+                    result.is_boolean = true;
+                    if(strcmp(left_result.string_value,right_result.string_value)==0){
+                        result.boolean_value = true;
+                    }
+                    else{
+                        result.boolean_value = false;
+                    }
+                    
+                     
+                }
+                else if (left_result.is_number && right_result.is_number) {
+                    result.is_boolean = true;
+                    result.boolean_value = left_result.number_value == right_result.number_value;
+                }
+                else{
+                    result.is_boolean = true;
+                    result.boolean_value = false;
+                }
+                
+
             }
             break;
         }  
+        
         
     }
 
