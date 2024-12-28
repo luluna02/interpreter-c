@@ -120,9 +120,7 @@ EvalResult evaluate_expr(Expr* expr) {
                     }
                     else{
                         result.boolean_value = false;
-                    }
-                    
-                     
+                    } 
                 }
                 else if (left_result.is_number && right_result.is_number) {
                     result.is_boolean = true;
@@ -134,6 +132,21 @@ EvalResult evaluate_expr(Expr* expr) {
                 }
                 
 
+            }
+            else if (expr->as.binary.binary_op.type == BANG_EQUAL) {  
+                if (left_result.is_number && right_result.is_number) {
+                    result.is_boolean = true;
+                    result.boolean_value = left_result.number_value != right_result.number_value;
+                }
+                else if (left_result.is_string && right_result.is_string) {
+                    result.is_boolean = true;
+                    if(strcmp(left_result.string_value,right_result.string_value)!=0){
+                        result.boolean_value = true;
+                    }
+                    else{
+                        result.boolean_value = false;
+                    } 
+                }
             }
             break;
         }  
