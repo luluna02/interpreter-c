@@ -145,11 +145,17 @@ EvalResult visit_binary(Expr* expr) {
                 result.is_boolean = true;
                 result.boolean_value = left_result.number_value > right_result.number_value;
             }
+            else{
+                runtime_error("Operands must be numbers.", expr->as.binary.binary_op.line);
+            }
             break;
         case LESS:
             if (left_result.is_number && right_result.is_number) {
                 result.is_boolean = true;
                 result.boolean_value = left_result.number_value < right_result.number_value;
+            }
+            else{
+                runtime_error("Operands must be numbers.", expr->as.binary.binary_op.line);
             }
             break;
         case GREATER_EQUAL:
@@ -157,11 +163,17 @@ EvalResult visit_binary(Expr* expr) {
                 result.is_boolean = true;
                 result.boolean_value = left_result.number_value >= right_result.number_value;
             }
+            else{
+                runtime_error("Operands must be numbers.", expr->as.binary.binary_op.line);
+            }
             break;
         case LESS_EQUAL:
             if (left_result.is_number && right_result.is_number) {
                 result.is_boolean = true;
                 result.boolean_value = left_result.number_value <= right_result.number_value;
+            }
+            else{
+                runtime_error("Operands must be numbers.", expr->as.binary.binary_op.line);
             }
             break;
         case EQUAL_EQUAL:
@@ -180,6 +192,9 @@ EvalResult visit_binary(Expr* expr) {
                 result.boolean_value = strcmp(left_result.string_value, right_result.string_value) != 0;
             } else if (left_result.is_number && right_result.is_number) {
                 result.boolean_value = left_result.number_value != right_result.number_value;
+            }
+            else{
+                runtime_error("Operands must be numbers.", expr->as.binary.binary_op.line);
             }
             break;
         default:
