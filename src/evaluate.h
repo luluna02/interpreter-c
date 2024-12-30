@@ -20,4 +20,10 @@ EvalResult evaluate_expr(Expr* expr);
 void print_eval_result(EvalResult result);
 void free_eval_result(EvalResult *result);
 
+EvalResult visit_literal(Expr* expr);
+EvalResult visit_grouping(Expr* expr);
+EvalResult visit_unary(Expr* expr);
+EvalResult visit_binary(Expr* expr);
+void runtime_error(const char *message, int line);
+
 #endif
