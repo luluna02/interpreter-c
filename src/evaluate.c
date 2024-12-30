@@ -127,6 +127,9 @@ EvalResult visit_binary(Expr* expr) {
                 strcpy(result.string_value, left_result.string_value);
                 strcat(result.string_value, right_result.string_value);
             }
+            else{
+                runtime_error("Operands must be numbers.", expr->as.binary.binary_op.line);
+            }
             break;
         case MINUS:
             if (left_result.is_number && right_result.is_number) {
