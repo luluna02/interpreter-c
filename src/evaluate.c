@@ -136,6 +136,9 @@ EvalResult visit_binary(Expr* expr) {
                 result.is_number = true;
                 result.number_value = left_result.number_value - right_result.number_value;
             }
+            else{
+                runtime_error("Operands must be numbers.", expr->as.binary.binary_op.line);
+            }
             break;
         case GREATER:
             if (left_result.is_number && right_result.is_number) {
