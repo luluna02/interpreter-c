@@ -23,6 +23,18 @@ bool match(Parser* parser, enum TokenType type) {
 }
 
 
+void parse_program(Parser* parser, StmtArray* statements) {
+    while (!is_at_end(parser)) {
+        Stmt* stmt = parse_statement(parser);
+        if (stmt != NULL) {
+            append_statement(statements, stmt);
+        } else {
+            synchronize(parser); // Recover from errors and continue parsing.
+        }
+    }
+}
+
+
 Stmt* parse_statement(Parser* parser) {
     if (match(parser, PRINT)) {
         Expr* value = parse_expression(parser);
@@ -151,3 +163,28 @@ void report_error(Parser* parser, Token* token, const char* message) {
 }
 
 
+
+void synchronize(Parser* parser) {
+    advance(parser);
+
+    while (!is_at_end(parser)) {
+        if (previous(parser)->type == SEMICOLON) return;
+
+        switch (peek(parser)->type) {
+            case PRINT:  
+            case END_OF_FILE:   
+                return;
+
+            default:
+                break;
+        }
+        advance(parser);
+    }
+}
+
+Token* previous(Parser* parser) {
+    if (parser->current > 0) {
+        return parser->tokens->array[parser->current - 1];  // Access the token from the array field.
+    }
+    return NULL;  
+}

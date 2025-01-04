@@ -201,21 +201,30 @@ EvalResult visit_binary(Expr* expr) {
                 result.boolean_value = strcmp(left_result.string_value, right_result.string_value) == 0;
             } else if (left_result.is_number && right_result.is_number) {
                 result.boolean_value = left_result.number_value == right_result.number_value;
+            } else if (left_result.is_boolean && right_result.is_boolean) {
+                result.boolean_value = left_result.boolean_value == right_result.boolean_value;
+            } else if (left_result.is_nil && right_result.is_nil) {
+                result.boolean_value = true;
             } else {
                 result.boolean_value = false;
             }
             break;
+
         case BANG_EQUAL:
             result.is_boolean = true;
             if (left_result.is_string && right_result.is_string) {
                 result.boolean_value = strcmp(left_result.string_value, right_result.string_value) != 0;
             } else if (left_result.is_number && right_result.is_number) {
                 result.boolean_value = left_result.number_value != right_result.number_value;
-            }
-            else{
-                runtime_error("Operands must be numbers.", expr->as.binary.binary_op.line);
+            } else if (left_result.is_boolean && right_result.is_boolean) {
+                result.boolean_value = left_result.boolean_value != right_result.boolean_value;
+            } else if (left_result.is_nil && right_result.is_nil) {
+                result.boolean_value = false;
+            } else {
+                result.boolean_value = true;
             }
             break;
+
         default:
             fprintf(stderr, "Unexpected binary operator\n");
             exit(65);

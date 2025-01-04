@@ -22,6 +22,12 @@ struct Stmt {
 };
 
 typedef struct {
+    Stmt** statements;
+    size_t count;
+    size_t capacity;
+} StmtArray;
+
+typedef struct {
     Token binary_op;
     Expr* left;
     Expr* right;
@@ -57,6 +63,9 @@ Expr* create_grouping_expr(Expr* expression);
 Expr* create_unary_expr(Token unary_op, Expr* expression);
 Stmt* create_expression_stmt(Expr* expression);
 Stmt* create_print_stmt(Expr* expression);
+StmtArray* create_statement_array();
+void append_statement(StmtArray* array, Stmt* stmt);
+void free_statement_array(StmtArray* array);
 void print_stmt_ast(Stmt* stmt);
 void print_ast(Expr *expr);
 void free_expr(Expr* expr);

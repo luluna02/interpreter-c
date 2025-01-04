@@ -141,3 +141,27 @@ void free_stmt(Stmt* stmt) {
     }
     free(stmt);
 }
+
+StmtArray* create_statement_array() {
+    StmtArray* array = malloc(sizeof(StmtArray));
+    array->statements = malloc(sizeof(Stmt*) * 8);
+    array->count = 0;
+    array->capacity = 8;
+    return array;
+}
+
+void append_statement(StmtArray* array, Stmt* stmt) {
+    if (array->count == array->capacity) {
+        array->capacity *= 2;
+        array->statements = realloc(array->statements, sizeof(Stmt*) * array->capacity);
+    }
+    array->statements[array->count++] = stmt;
+}
+
+void free_statement_array(StmtArray* array) {
+    for (size_t i = 0; i < array->count; i++) {
+        free_stmt(array->statements[i]);
+    }
+    free(array->statements);
+    free(array);
+}

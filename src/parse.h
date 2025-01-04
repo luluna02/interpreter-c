@@ -27,6 +27,8 @@ void free_parser(Parser* parser);
 void report_error(Parser* parser, Token* token, const char* message);
 void synchronize(Parser* parser);
 bool is_at_end(Parser* parser); 
+Token* previous(Parser* parser);
+void parse_program(Parser* parser, StmtArray* statements);
 
 
 #endif

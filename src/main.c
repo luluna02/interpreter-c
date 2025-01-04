@@ -110,17 +110,20 @@ int main(int argc, char *argv[]) {
             return exit_code;
         }
         Parser *parser = create_parser(tokens);
-        Stmt *stmt = parse_statement(parser);
+        StmtArray *statements = create_statement_array();
+        parse_program(parser, statements);
         if (parser->had_error== true) {
             fprintf(stderr, "Error parsing AST\n");
             exit_code = 65;
         } else {
             //EVALUATE
-            EvalResult result = evaluate_stmt(stmt);
-            print_eval_result(result);
-            free_eval_result(&result);
+             for (size_t i = 0; i < statements->count; i++) {
+                Stmt *stmt = statements->statements[i];
+                EvalResult result = evaluate_stmt(stmt);
+                print_eval_result(result);
+                free_eval_result(&result);
+            }
         }
-        free_stmt(stmt);
         free_parser(parser);
         free(file_contents);
     }
