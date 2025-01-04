@@ -15,6 +15,8 @@ typedef struct {
     char *string_value;   // Holds the string value (null-terminated)
 } EvalResult;
 
+EvalResult evaluate_stmt(Stmt* stmt);
+
 // Evaluate an expression
 EvalResult evaluate_expr(Expr* expr);
 void print_eval_result(EvalResult result);

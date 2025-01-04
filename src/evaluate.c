@@ -5,6 +5,25 @@
 
 
 
+
+EvalResult evaluate_stmt(Stmt* stmt) {
+    switch (stmt->type) {
+        case STMT_PRINT: {
+            EvalResult result = evaluate_expr(stmt->as.print.expression);
+            return result;
+            break;
+        }
+        case EXPR: {
+            EvalResult result = evaluate_expr(stmt->as.expr.expression);
+            return result;
+            break;
+        }
+        default:
+            fprintf(stderr, "Unexpected statement type\n");
+            exit(65);
+    }
+}
+
 EvalResult evaluate_expr(Expr* expr) {
     switch (expr->type) {
         case LITERAL:

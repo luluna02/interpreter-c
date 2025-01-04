@@ -23,23 +23,27 @@ bool match(Parser* parser, enum TokenType type) {
 }
 
 
-Expr* parse_primary(Parser* parser) {
-    if (match(parser, TRUE) || match(parser, FALSE) || match(parser, NIL) || match(parser, NUMBER) || match(parser, STRING)) {
-        return create_literal_expr(*parser->tokens->array[parser->current - 1]);
-    }
-
-    if (match(parser, LEFT_PAREN)) {
-        Expr* expr = parse_expression(parser);
-        if (!match(parser, RIGHT_PAREN)) {
-            report_error(parser, peek(parser), "Expected ')'.");
+Stmt* parse_statement(Parser* parser) {
+    if (match(parser, PRINT)) {
+        Expr* value = parse_expression(parser);
+        if (!match(parser, SEMICOLON)) {
+            report_error(parser, peek(parser), "Expected ';' after value.");
             return NULL;
         }
-        return create_grouping_expr(expr);
+        return create_print_stmt(value);
     }
-
-    report_error(parser, peek(parser), "Expected an expression.");
-    return NULL;
+    return parse_expression_statement(parser);
 }
+
+Stmt* parse_expression_statement(Parser* parser) {
+    Expr* expr = parse_expression(parser);
+    if (!match(parser, SEMICOLON)) {
+        report_error(parser, peek(parser), "Expected ';' after expression.");
+        return NULL;
+    }
+    return create_expression_stmt(expr);
+}
+
 
 
 Expr* parse_expression(Parser* parser) {
@@ -93,6 +97,24 @@ Expr* parse_unary(Parser* parser) {
         return create_unary_expr(operator, right);
     }
     return parse_primary(parser);
+}
+
+Expr* parse_primary(Parser* parser) {
+    if (match(parser, TRUE) || match(parser, FALSE) || match(parser, NIL) || match(parser, NUMBER) || match(parser, STRING)) {
+        return create_literal_expr(*parser->tokens->array[parser->current - 1]);
+    }
+
+    if (match(parser, LEFT_PAREN)) {
+        Expr* expr = parse_expression(parser);
+        if (!match(parser, RIGHT_PAREN)) {
+            report_error(parser, peek(parser), "Expected ')'.");
+            return NULL;
+        }
+        return create_grouping_expr(expr);
+    }
+
+    report_error(parser, peek(parser), "Expected an expression.");
+    return NULL;
 }
 
 

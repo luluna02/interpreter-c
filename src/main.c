@@ -96,6 +96,34 @@ int main(int argc, char *argv[]) {
         free_parser(parser);
         free(file_contents);
     }
+    else if (strcmp(command, "run") == 0) {
+         fprintf(stderr, "Parsing input file...\n");
+
+        char *file_contents = read_file_contents(argv[2]);
+        if (!file_contents) return 1;
+        TokenArray *tokens = create_token_array();
+        exit_code = scan_tokens(tokens, file_contents);
+
+        if (exit_code != 0) {
+            fprintf(stderr, "Error during tokenization\n");
+            free(file_contents);
+            return exit_code;
+        }
+        Parser *parser = create_parser(tokens);
+        Stmt *stmt = parse_statement(parser);
+        if (parser->had_error== true) {
+            fprintf(stderr, "Error parsing AST\n");
+            exit_code = 65;
+        } else {
+            //EVALUATE
+            EvalResult result = evaluate_stmt(stmt);
+            print_eval_result(result);
+            free_eval_result(&result);
+        }
+        free_stmt(stmt);
+        free_parser(parser);
+        free(file_contents);
+    }
      else {
         fprintf(stderr, "Unknown command: %s\n", command);
         return 1;

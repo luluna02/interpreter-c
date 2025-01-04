@@ -1,6 +1,20 @@
 #include "ast.h"
 #include <stdlib.h>
 
+Stmt* create_expression_stmt(Expr* expr) {
+    Stmt* stmt = malloc(sizeof(Stmt));
+    stmt->type = EXPR;
+    stmt->as.expr.expression = expr;
+    return stmt;
+}
+Stmt* create_print_stmt(Expr* expr) {
+    Stmt* stmt = malloc(sizeof(Stmt));
+    stmt->type = STMT_PRINT;
+    stmt->as.print.expression = expr;
+    return stmt;
+}
+
+
 Expr* create_binary_expr(Token binary_op, Expr* left, Expr* right) {
     Expr* expr = malloc(sizeof(Expr));
     expr->type = BINARY;
@@ -104,10 +118,26 @@ void print_ast(Expr *expr) {
 }
 
 
+void print_stmt_ast(Stmt* stmt) {
+    if (stmt->type == EXPR) {
+        print_ast(stmt->as.expr.expression);
+    } else if (stmt->type == PRINT) {
+        printf("(print ");
+        print_ast(stmt->as.print.expression);
+        printf(")");
+    }
+}
 
 
-
-
-
-
-
+void free_stmt(Stmt* stmt) {
+    if (!stmt) return;
+    switch (stmt->type) {
+        case EXPR:
+            free_expr(stmt->as.expr.expression);
+            break;
+        case STMT_PRINT:
+            free_expr(stmt->as.print.expression);
+            break;
+    }
+    free(stmt);
+}

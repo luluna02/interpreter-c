@@ -18,6 +18,8 @@ Expr* parse_term(Parser* parser);
 Expr* parse_primary(Parser* parser);
 Expr* parse_unary(Parser* parser);
 Expr* parse_factor(Parser* parser);
+Stmt* parse_statement(Parser* parser);
+Stmt* parse_expression_statement(Parser* parser);
 bool match(Parser* parser, enum TokenType type);
 Token* advance(Parser* parser);
 Token* peek(Parser* parser);
