@@ -10,6 +10,7 @@ EvalResult evaluate_stmt(Stmt* stmt) {
     switch (stmt->type) {
         case STMT_PRINT: {
             EvalResult result = evaluate_expr(stmt->as.print.expression);
+            print_eval_result(result);
             return result;
             break;
         }

@@ -120,7 +120,6 @@ int main(int argc, char *argv[]) {
              for (size_t i = 0; i < statements->count; i++) {
                 Stmt *stmt = statements->statements[i];
                 EvalResult result = evaluate_stmt(stmt);
-                print_eval_result(result);
                 free_eval_result(&result);
             }
         }
